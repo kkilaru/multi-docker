@@ -10,7 +10,7 @@ script:
 
 after_success:
   - docker build -t skilaru/multi-client ./client
-  - docker biuld -t skilaru/multi-nginx ./nginx
+  - docker build -t skilaru/multi-nginx ./nginx
   - docker build -t skilaru/multi-server ./server
   - docker build -t skilaru/multi-worker ./worker
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
