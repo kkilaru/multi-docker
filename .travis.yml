@@ -1,0 +1,20 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t skilaru/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run skilaru/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t skilaru/multi-client ./client
+  - docker biuld -t skilaru/multi-nginx ./nginx
+  - docker build -t skilaru/multi-server ./server
+  - docker build -t skilaru/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push skilaru/multi-client
+  - docker push skilaru/multi-nginx
+  - docker push skilaru/multi-server
+  - docker push skilaru/multi-worker
